@@ -1,5 +1,3 @@
-# BRANCH NEEDS TO BE PASSED ON BY THE WORKFLOW --> EMB should not be installed here already, but in GH action
-
 # Use the Windows Server Core LTSC 2019 base image
 FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
@@ -50,7 +48,7 @@ RUN Invoke-WebRequest -Uri 'https://downloads.fdossena.com/geth.php?r=mesa64-lat
 # RUN git clone --recurse-submodules https://github.com/EnMAP-Box/enmap-box.git "$env:EMB_DIR"
 
 COPY docker_startup.bat ${DOCKER_STARTUP_SCRIPT}
-COPY setup_enmapbox.bat "C:\\setup_enmapbox.bat"
+# COPY setup_enmapbox.bat "C:\\setup_enmapbox.bat"
 # RUN C:\\setup_enmapbox.bat
 
 # Set working directory to OSGeo dir and activate the OSGeo env at startup
