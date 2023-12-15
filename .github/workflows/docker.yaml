@@ -19,10 +19,10 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Docker login
-        run: docker login -u "$env:DOCKER_USER" -p "$env:DOCKER_PASSWORD"
+        run: docker login -u ${{ env.DOCKER_USER }} -p {{ env.DOCKER_PASSWORD }}
         shell: pwsh
       - name: Build image
-        run: docker build win --file Dockerfile --tag $IMAGE_NAME
+        run: docker build win --file Dockerfile --tag ${{ env.IMAGE_NAME }}
         shell: pwsh
       - name: Push image
         run: |
