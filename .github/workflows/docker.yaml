@@ -19,15 +19,18 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Docker login
-        run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        run: docker login -u "$env:$DOCKER_USER" -p "$env:$DOCKER_PASSWORD"
+        shell: pwsh
       - name: Build image
         run: docker build win --file Dockerfile --tag $IMAGE_NAME
+        shell: pwsh
       - name: Push image
         run: |
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          [ "$VERSION" == "main" ] && VERSION=latest
-          echo VERSION=$VERSION
-          echo DOCKER=$DOCKER_USER/$IMAGE_NAME:$VERSION
-          docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME:$VERSION
-          docker push $DOCKER_USER/$IMAGE_NAME:$VERSION
+          $VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          if ("${{ github.ref }}" -match "refs/tags/") { $VERSION = $VERSION -replace '^v', '' }
+          if ($VERSION -eq "main") { $VERSION = "latest" }
+          Write-Host "VERSION=$VERSION"
+          Write-Host "DOCKER=${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$VERSION"
+          docker tag ${{ env.IMAGE_NAME }} ${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$VERSION
+          docker push ${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$VERSION
+        shell: pwsh
