@@ -27,11 +27,14 @@ jobs:
         shell: pwsh
       - name: Push image
         run: |
-          $VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          if ("${{ github.ref }}" -match "refs/tags/") { $VERSION = $VERSION -replace '^v', '' }
-          if ($VERSION -eq "main") { $VERSION = "latest" }
-          Write-Host "VERSION=$VERSION"
-          Write-Host "DOCKER=${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$VERSION"
-          docker tag ${{ env.IMAGE_NAME }} ${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$VERSION
-          docker push ${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$VERSION
+          $TAG_SUFFIX = ""
+          if ("${{ github.ref }}" -match "refs/heads/") {
+            $TAG_SUFFIX = "latest"
+          } elseif ("${{ github.ref }}" -match "refs/tags/") {
+            $TAG_SUFFIX = "${{ github.ref }}" -replace '^refs/tags/', '' -replace '^v', ''
+          }
+          $DOCKER_TAG = "${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$TAG_SUFFIX"
+          Write-Host "DOCKER_TAG=$DOCKER_TAG"
+          docker tag ${{ env.IMAGE_NAME }}:$DOCKER_TAG
+          docker push $DOCKER_TAG
         shell: pwsh
