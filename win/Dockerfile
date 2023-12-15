@@ -1,5 +1,4 @@
-# Use the Windows Server Core LTSC 2019 base image
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 # Set ARGS and ENV variables
 ARG DOCKER_STARTUP_SCRIPT=C:\\docker_startup.bat
