@@ -27,7 +27,7 @@ jobs:
         shell: pwsh
       - name: Push image
         run: |
-          $TAG_SUFFIX = ""
+          $TAG_SUFFIX = "latest" # Default tag
           if ("${{ github.ref }}" -match "refs/heads/") {
             $TAG_SUFFIX = "latest"
           } elseif ("${{ github.ref }}" -match "refs/tags/") {
@@ -35,6 +35,6 @@ jobs:
           }
           $DOCKER_TAG = "${{ env.DOCKER_USER }}/${{ env.IMAGE_NAME }}:$TAG_SUFFIX"
           Write-Host "DOCKER_TAG=$DOCKER_TAG"
-          docker tag ${{ env.IMAGE_NAME }}:$DOCKER_TAG
+          docker tag "${{ env.IMAGE_NAME }}" $DOCKER_TAG
           docker push $DOCKER_TAG
         shell: pwsh
