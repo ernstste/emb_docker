@@ -21,7 +21,7 @@ jobs:
       - name: Docker login
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build image
-        run: docker build . --file win/Dockerfile --tag $IMAGE_NAME
+        run: docker build win --file Dockerfile --tag $IMAGE_NAME
       - name: Push image
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
